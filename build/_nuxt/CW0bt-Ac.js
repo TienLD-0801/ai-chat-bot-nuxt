@@ -1,0 +1,1 @@
+import{_ as a}from"./DjxEfnIg.js";import{n as e,h as s,j as r,k as t,t as d}from"./aVp2OMsq.js";const i={class:"header"},l=t("div",{class:"header__image"},[t("img",{loading:"lazy",src:a})],-1),o={class:"header__text"},_=e({__name:"Header",props:{titleHeader:{}},setup:a=>(a,e)=>(s(),r("div",i,[l,t("div",o,[t("div",null,d(a.titleHeader),1)])]))});export{_};

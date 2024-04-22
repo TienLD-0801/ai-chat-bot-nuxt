@@ -1,0 +1,1 @@
+const o=()=>{const o=new WebSocket("wss://hannover2.korenext.com");return o.onopen=()=>{console.log("Socket Open !!!")},o.onerror=()=>{console.log("Error socket")},o.onclose=()=>{console.log("Socket Close !!!")},{ws:o}};export{o as u};
