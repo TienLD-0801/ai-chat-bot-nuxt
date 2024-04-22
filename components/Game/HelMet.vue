@@ -1,11 +1,4 @@
 <template>
-  <PopupResult
-    title="What are you going to do then ?"
-    status="Handsign"
-    v-show="isShowPopup"
-    v-on:on-click-again="handleOnClickAgain"
-    v-on:on-click-chat="handleOnClickChat"
-  />
   <div class="game-helmet">
     <div class="game-helmet__item">
       <img
@@ -50,17 +43,58 @@
       />
     </div>
     <div class="game-helmet__button-wrapper">
-      <div class="game-helmet__button-wrapper__container">
-        <p class="game-helmet__button-wrapper__container__title">
-          {{ textResult ?? "LET WEAR THE HELMET!" }}
+      <div
+        class="game-helmet__button-wrapper__container"
+        @click.stop="!textResult ? $emit('on-click-ready') : undefined"
+      >
+        <img
+          v-if="!isCheckAnswer && textResult"
+          width="80"
+          height="80"
+          src="/images/sad.png"
+          class="ame-helmet__button-wrapper__container__icon"
+        />
+        <img
+          v-else-if="isCheckAnswer && textResult"
+          width="80"
+          height="80"
+          src="/images/firework.png"
+          class="ame-helmet__button-wrapper__container__icon"
+        />
+        <p
+          v-show="textResult"
+          :class="
+            isCheckAnswer
+              ? 'game-helmet__button-wrapper__container__success'
+              : 'game-helmet__button-wrapper__container__wrong'
+          "
+        >
+          {{ textResult }}
+        </p>
+        <p
+          v-show="!isCheckAnswer && !textResult"
+          class="game-helmet__button-wrapper__container__title"
+        >
+          {{ "LET WEAR THE HELMET!" }}
         </p>
       </div>
+    </div>
+    <div
+      v-show="textResult"
+      @click="$emit('on-try-more')"
+      class="button-play-again"
+    >
+      Do you want to try more ?
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+defineEmits(["on-click-ready", "on-try-more"]);
+const { start, stream } = useCamera();
 const { $state, resetValue } = useHelmet();
+const videoHelmet = ref<HTMLVideoElement>();
+
 const isCheckAnswer = computed(() => {
   if (!$state.result) return;
   const { result } = $state.result;
@@ -70,7 +104,6 @@ const isCheckAnswer = computed(() => {
 const textResult = computed(() => {
   if (!$state.result) return;
   const { result } = $state.result;
-
   switch (result["s"]) {
     case 0:
       return `SOMETHING NOT RIGHT! ${result["result"]}`;
@@ -83,39 +116,8 @@ const resultComputed = computed(() => {
   if (!$state.result) return;
   return $state.result.image;
 });
-const { start, stream } = useCamera();
-const isShowPopup = ref(false);
-const videoHelmet = ref<HTMLVideoElement>();
-
-const handleOnClickAgain = () => {
-  isShowPopup.value = false;
-  resetValue();
-};
-
-const handleOnClickChat = () => {
-  isShowPopup.value = false;
-  navigateTo("/ChatBot");
-};
-
-const popupCall = () => {
-  setTimeout(() => {
-    isShowPopup.value = true;
-  }, 3000);
-};
-
-watch(
-  () => $state.result,
-  (current, old) => {
-    if (current === null) {
-      return;
-    } else {
-      popupCall();
-    }
-  }
-);
 
 onUnmounted(() => {
-  isShowPopup.value = false;
   resetValue();
 });
 
@@ -125,15 +127,9 @@ watchEffect(() => {
   }
 });
 
-// watch(isShowPopup, (current, old) => {
-//   if (!old) {
-//     setTimeout(() => {
-//       navigateTo("/");
-//     }, 80000);
-//   }
-// });
-
-start();
+onBeforeMount(() => {
+  start();
+});
 </script>
 
 <style lang="scss">
@@ -165,7 +161,7 @@ start();
 
   &__button-wrapper {
     width: 100%;
-    bottom: 67px;
+    bottom: 100px;
     position: absolute;
     display: flex;
     justify-content: center;
@@ -190,7 +186,40 @@ start();
         white-space: pre-line;
         text-align: center;
       }
+
+      &__success {
+        margin: 0;
+        max-width: 350px;
+        display: inline;
+        font-size: 26px;
+        font-weight: 600;
+        color: blue;
+        white-space: pre-line;
+        text-align: center;
+      }
+
+      &__wrong {
+        margin: 0;
+        max-width: 350px;
+        display: inline;
+        font-size: 26px;
+        font-weight: 600;
+        color: red;
+        white-space: pre-line;
+        text-align: center;
+      }
     }
   }
+}
+
+.button-play-again {
+  padding: 15px 15px;
+  border-radius: 10px;
+  background: gray;
+  position: absolute;
+  bottom: 30px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
 }
 </style>

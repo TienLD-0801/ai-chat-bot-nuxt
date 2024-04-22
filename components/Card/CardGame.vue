@@ -2,7 +2,13 @@
   <div class="card-game">
     <div class="card-game__item" v-for="item in dataGame" :key="item.id">
       <div class="card-game__item__image" @click="handleNavigateGame(item)">
-        <img width="157" height="125" loading="lazy" :src="item.image" alt="No Image" />
+        <img
+          width="157"
+          height="125"
+          loading="lazy"
+          :src="item.image"
+          alt="No Image"
+        />
       </div>
       <div class="card-game__item__title">{{ item.title }}</div>
     </div>
@@ -11,11 +17,11 @@
 
 <script lang="ts" setup>
 defineProps<{
-  dataGame: { id: string; image: string; title: string }[];
+  dataGame: GameType[];
 }>();
 
-const handleNavigateGame = (item: any) => {
-  navigateTo(`/Game?name=${item.name}`);
+const handleNavigateGame = (item: GameType) => {
+  navigateTo(item.path);
 };
 </script>
 

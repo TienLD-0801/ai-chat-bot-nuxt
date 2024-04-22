@@ -49,7 +49,6 @@ const {start , stop , recognition} = useSpeechRecognition({
 })
 
 onBeforeMount(() => {
-
   ws.onmessage = (evt) => {
     videoURL.value = evt.data
   };
@@ -68,8 +67,6 @@ onMounted(()=> {
    start();
   })
 })
-
-
 
 
 const toggleTranscription = () => {
@@ -116,6 +113,7 @@ const callAPIChatBot = async (queryMsg , chatId) => {
       body: JSON.stringify(params),
     });
     messageStore.setMessage({ name: 'bot', answer: data.answer, chatId: data.conversation_id });
+    console.log('data', data.answer);
   } catch (error) {
     console.log(error);
   }finally{

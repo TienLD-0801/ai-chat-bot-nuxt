@@ -1,14 +1,11 @@
 <template>
-  <PopupResult
-    title="What are you going to do then ?"
-    v-show="isShowPopup"
-    status="Helmet"
-    v-on:on-click-again="handleOnClickAgain"
-    v-on:on-click-chat="handleOnClickChat"
-  />
   <div class="game-handsign">
     <div class="game-handsign__item" v-if="!$state.result">
-      <div class="game-handsign__item__img" v-for="item in DATA_HAND_SIGN" :key="item.id">
+      <div
+        class="game-handsign__item__img"
+        v-for="item in DATA_HAND_SIGN"
+        :key="item.id"
+      >
         <img :src="item.image" />
       </div>
     </div>
@@ -18,7 +15,10 @@
       </div>
     </div>
     <div class="game-handsign__button-wrapper">
-      <div class="game-handsign__button-wrapper__container">
+      <div
+        class="game-handsign__button-wrapper__container"
+        @click.stop="!$state.result ? $emit('on-click-ready') : undefined"
+      >
         <img
           width="92"
           height="92"
@@ -33,12 +33,19 @@
         </p>
       </div>
     </div>
+    <div
+      v-show="$state.result"
+      @click="$emit('on-try-more')"
+      class="button-play-again"
+    >
+      Do you want to try more ?
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+defineEmits(["on-click-ready", "on-try-more"]);
 const { $state, resetValue } = useHandSign();
-const isShowPopup = ref(false);
 
 const convertImage = () => {
   switch ($state.result) {
@@ -59,38 +66,13 @@ const convertImage = () => {
   }
 };
 
-const popupCall = () => {
-  setTimeout(() => {
-    isShowPopup.value = true;
-  }, 3000);
-};
-
-const handleOnClickAgain = () => {
-  isShowPopup.value = false;
-  resetValue();
-};
-
-const handleOnClickChat = () => {
-  isShowPopup.value = false;
-  navigateTo("/ChatBot");
-};
-
-onUnmounted(() => {
-  isShowPopup.value = false;
-  resetValue();
-});
-
-// watch(isShowPopup, (current, old) => {
-//   if (!old) {
-//     setTimeout(() => {
-//       navigateTo("/");
-//     }, 80000);
-//   }
+// onUnmounted(() => {
+//   isShowPopup.value = false;
+//   resetValue();
 // });
 
 watchEffect(() => {
   if (!$state.result) return;
-  popupCall();
 });
 </script>
 
@@ -149,7 +131,7 @@ watchEffect(() => {
 
   &__button-wrapper {
     width: 100%;
-    bottom: 67px;
+    bottom: 80px;
     position: absolute;
     display: flex;
     justify-content: center;
@@ -176,5 +158,16 @@ watchEffect(() => {
       }
     }
   }
+}
+
+.button-play-again {
+  padding: 15px 15px;
+  border-radius: 10px;
+  background: gray;
+  position: absolute;
+  bottom: 10px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
 }
 </style>

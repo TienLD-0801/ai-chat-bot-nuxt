@@ -1,8 +1,15 @@
 <template>
   <div class="dialog">
     <div class="dialog__card">
-      <div>{{ title }}</div>
-      <div v-if="numberCountDown !== 0">{{ numberCountDown }}</div>
+      <div class="dialog__card__title">{{ title }}</div>
+      <div
+        :class="
+          numberCountDown <= 3 ? 'dialog__card__waring' : 'dialog__card__number'
+        "
+        v-if="numberCountDown !== 0"
+      >
+        {{ numberCountDown }}
+      </div>
     </div>
   </div>
 </template>
@@ -16,12 +23,12 @@ defineProps<{
 
 <style lang="scss">
 .dialog {
-  position: absolute;
+  position: fixed;
   background: black;
-  opacity: 0.75;
+  opacity: 0.8;
   height: 100vh;
   width: 100%;
-  z-index: 1;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,14 +37,35 @@ defineProps<{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px;
+    padding: 20px 50px;
+    gap: 15px;
     position: absolute;
     background: #ffffff;
-    color: black;
     border-radius: 10px;
-    z-index: 2;
-    font-size: 30px;
+    z-index: 20;
+    font-size: 35px;
     font-weight: 800;
+
+    &__number {
+      color: blue;
+    }
+
+    &__waring {
+      color: red;
+      animation: zoom 1s infinite;
+
+      @keyframes zoom {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.5);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
   }
 }
 </style>

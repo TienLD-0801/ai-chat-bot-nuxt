@@ -1,8 +1,8 @@
-export const DATA_GAME = [
+export const DATA_GAME: GameType[] = [
   {
     id: "1",
     image: "images/game_1.png",
-    name: "REVERSED-JEOPARDY",
+    path: PATH.HAND_SIGN,
     title: "REVERSED JEOPARDY",
   },
   // {
@@ -13,7 +13,7 @@ export const DATA_GAME = [
   {
     id: "2",
     image: "images/game_3.png",
-    name: "HARDHAT-HERO",
+    path: PATH.HEL_MET,
     title: "HARDHAT HERO",
   },
 ];

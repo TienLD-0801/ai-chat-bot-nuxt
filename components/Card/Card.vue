@@ -1,17 +1,23 @@
 <template>
   <div class="card-chat">
     <div class="card-chat__title">BnK AI CHATBOT</div>
-    <div class="card-chat__title-first">Automated Assistant and Business Supporter</div>
+    <div class="card-chat__title-first">
+      Automated Assistant and Business Supporter
+    </div>
     <div class="card-chat__wrapper">
       <img src="/assets/svg/arrow-up-right.svg" />
-      <div @click="navigateTo('/ChatBot')" class="card-chat__wrapper__button">
+      <div @click="handleGotoChatBot" class="card-chat__wrapper__button">
         Click here to explore
       </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script lang="ts" setup>
+const handleGotoChatBot = () => {
+  navigateTo(PATH.CHAT_BOT);
+};
+</script>
 
 <style lang="scss" scoped>
 .card-chat {

@@ -1,7 +1,11 @@
 <template>
   <div class="input-chat">
     <div class="input-chat__container">
-      <img loading="lazy" src="~/assets/svg/close.svg" @click="navigateTo('/')" />
+      <img
+        loading="lazy"
+        src="~/assets/svg/close.svg"
+        @lick="navigateTo('/')"
+      />
       <input disabled />
       <img loading="lazy" style="flex: 1" src="~/assets/svg/send.svg" />
     </div>
