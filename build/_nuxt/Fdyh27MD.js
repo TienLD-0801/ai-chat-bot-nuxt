@@ -1,1 +1,0 @@
-import{u as t}from"./DjxEfnIg.js";import"./aVp2OMsq.js";const s=()=>{const{start:s,stop:r,stream:o,isSupported:a,restart:e}=t({constraints:{audio:!1,video:!0}});return a||(alert("Camera is not supported"),r()),console.log("Camera is ready !!!"),{stream:o,start:s,stop:r,isSupported:a,restart:e}},r=window.setInterval;export{r as s,s as u};
