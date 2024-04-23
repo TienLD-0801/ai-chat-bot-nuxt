@@ -4,11 +4,6 @@
     :numberCountDown="numberCountDown"
     v-show="isShowPopup"
   />
-  <PopupReady
-    title="Are You Ready ?"
-    @on-click-yes="handleClickYes"
-    v-show="isShowReady"
-  />
   <main class="page-hand-sign">
     <div class="layout">
       <Header titleHeader="REVERSED-JEOPARDY" />
@@ -29,27 +24,20 @@ const { start, stream } = useCamera();
 const handSign = useHandSign();
 const videoGame = ref<HTMLVideoElement>();
 const isShowPopup = ref<boolean>(false);
-const isShowReady = ref<boolean>(false);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
 const numberCountDown = ref<number>(0);
 const title = ref<string>("");
 const { isAction, handleDetectAction } = useGoBack();
 
 const handleClickReady = () => {
-  isShowReady.value = true;
-  handSign.resetValue();
+  isShowPopup.value = true;
+  title.value = "Ready go ...";
+  countdown(5);
 };
 
 const handleTryMore = () => {
   isAction.value = true;
   handSign.resetValue();
-};
-
-const handleClickYes = () => {
-  isShowReady.value = false;
-  isShowPopup.value = true;
-  title.value = "Ready go ...";
-  countdown(5);
 };
 
 const countdown = (number: number) => {

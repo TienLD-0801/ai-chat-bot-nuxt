@@ -1,11 +1,7 @@
 <template>
   <div class="game-handsign">
     <div class="game-handsign__item" v-if="!$state.result">
-      <div
-        class="game-handsign__item__img"
-        v-for="item in DATA_HAND_SIGN"
-        :key="item.id"
-      >
+      <div class="game-handsign__item__img" v-for="item in DATA_HAND_SIGN" :key="item.id">
         <img :src="item.image" />
       </div>
     </div>
@@ -26,9 +22,7 @@
         />
         <p class="game-handsign__button-wrapper__container__title">
           {{
-            !$state.result
-              ? "LET’S POSE A HANDSIGN!"
-              : `YOU ARE POSING A [${$state.result}]!`
+            !$state.result ? "Are you ready ?" : `YOU ARE POSING A [${$state.result}]!`
           }}
         </p>
       </div>
@@ -36,7 +30,7 @@
     <div
       v-show="$state.result"
       @click="$emit('on-try-more')"
-      class="button-play-again"
+      class="button-handsign-again"
     >
       Do you want to try more ?
     </div>
@@ -75,7 +69,7 @@ watchEffect(() => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .game-handsign {
   display: flex;
   flex-direction: column;
@@ -133,7 +127,7 @@ watchEffect(() => {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 60px;
 
     &__container {
       background: linear-gradient(89.25deg, #3abf38 0.54%, #008b90 99.35%);
@@ -158,8 +152,8 @@ watchEffect(() => {
   }
 }
 
-.button-play-again {
-  margin-top: 15px;
+.button-handsign-again {
+  margin-top: 40px;
   padding: 15px 15px;
   border-radius: 10px;
   background: gray;

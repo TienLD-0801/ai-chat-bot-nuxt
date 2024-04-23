@@ -4,11 +4,6 @@
     :numberCountDown="numberCountDown"
     v-show="isShowPopup"
   />
-  <PopupReady
-    title="Are You Ready ?"
-    @on-click-yes="handleClickYes"
-    v-show="isShowReady"
-  />
   <main class="page-hel-met">
     <div class="layout">
       <Header titleHeader="HARDHAT HER0" />
@@ -28,7 +23,6 @@
 const { start, stream } = useCamera();
 const videoGame = ref<HTMLVideoElement>();
 const isShowPopup = ref<boolean>(false);
-const isShowReady = ref<boolean>(false);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
 const numberCountDown = ref<number>(0);
 const title = ref<string>("");
@@ -41,11 +35,6 @@ const handleActionTryMore = () => {
 };
 
 const handleClickReady = () => {
-  isShowReady.value = true;
-};
-
-const handleClickYes = () => {
-  isShowReady.value = false;
   isShowPopup.value = true;
   title.value = "Capturing ...";
   countdown(5);

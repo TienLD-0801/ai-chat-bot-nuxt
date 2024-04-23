@@ -75,14 +75,14 @@
           v-show="!isCheckAnswer && !textResult"
           class="game-helmet__button-wrapper__container__title"
         >
-          {{ "LET WEAR THE HELMET!" }}
+          {{ "Are you ready ?" }}
         </p>
       </div>
     </div>
     <div
       v-show="textResult"
       @click="$emit('on-try-more')"
-      class="button-play-again"
+      class="button-helmet-again"
     >
       Do you want to try more ?
     </div>
@@ -106,9 +106,9 @@ const textResult = computed(() => {
   const { result } = $state.result;
   switch (result["s"]) {
     case 0:
-      return `SOMETHING NOT RIGHT! ${result["result"]}`;
+      return result["result"];
     case 1:
-      return "CONGRATULATION! YOU ARE WEARING YOUR HELMET CORRECTLY";
+      return result["result"];
   }
 });
 
@@ -161,7 +161,7 @@ onBeforeMount(() => {
   }
 
   &__button-wrapper {
-    margin-top: 40px;
+    margin-top: 60px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -212,8 +212,9 @@ onBeforeMount(() => {
   }
 }
 
-.button-play-again {
+.button-helmet-again {
   padding: 15px 15px;
+  margin-top: 40px;
   border-radius: 10px;
   background: gray;
   color: #ffffff;
