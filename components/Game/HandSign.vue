@@ -66,10 +66,9 @@ const convertImage = () => {
   }
 };
 
-// onUnmounted(() => {
-//   isShowPopup.value = false;
-//   resetValue();
-// });
+onUnmounted(() => {
+  resetValue();
+});
 
 watchEffect(() => {
   if (!$state.result) return;
@@ -79,6 +78,7 @@ watchEffect(() => {
 <style lang="scss">
 .game-handsign {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -118,11 +118,11 @@ watchEffect(() => {
   }
 
   &__result {
+    margin-top: 70px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 70px;
     border-radius: 30px;
     background: #ffffff;
     min-width: 538px;
@@ -131,11 +131,9 @@ watchEffect(() => {
 
   &__button-wrapper {
     width: 100%;
-    bottom: 80px;
-    position: absolute;
     display: flex;
     justify-content: center;
-    height: 138px;
+    margin-top: 40px;
 
     &__container {
       background: linear-gradient(89.25deg, #3abf38 0.54%, #008b90 99.35%);
@@ -161,11 +159,10 @@ watchEffect(() => {
 }
 
 .button-play-again {
+  margin-top: 15px;
   padding: 15px 15px;
   border-radius: 10px;
   background: gray;
-  position: absolute;
-  bottom: 10px;
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;

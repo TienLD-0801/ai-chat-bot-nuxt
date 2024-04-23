@@ -14,13 +14,13 @@
       <Header titleHeader="REVERSED-JEOPARDY" />
       <HandSign
         @on-click-ready="handleClickReady"
-        @on-try-more="handSign.resetValue()"
+        @on-try-more="handleTryMore"
       />
-      <video ref="videoGame" height="100%" width="100%" autoplay>
-        <source type="video/mp4" />
-        <canvas ref="canvasElement"></canvas>
-      </video>
     </div>
+    <video ref="videoGame" height="100%" width="100%" autoplay>
+      <source type="video/mp4" />
+      <canvas ref="canvasElement"></canvas>
+    </video>
   </main>
 </template>
 
@@ -33,9 +33,16 @@ const isShowReady = ref<boolean>(false);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
 const numberCountDown = ref<number>(0);
 const title = ref("");
+const { isAction, handleDetectAction } = useGoBack();
 
 const handleClickReady = () => {
   isShowReady.value = true;
+  handSign.resetValue();
+};
+
+const handleTryMore = () => {
+  isAction.value = true;
+  handSign.resetValue();
 };
 
 const handleClickYes = () => {
@@ -87,6 +94,7 @@ const fetchAPI = async (imageCapture: string) => {
     console.log("error ", error);
   } finally {
     isShowPopup.value = false;
+    handleDetectAction(TIME_OUT_BACK);
   }
 };
 

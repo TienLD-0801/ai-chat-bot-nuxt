@@ -1,5 +1,5 @@
 export const useHelmet = defineStore(
-  "helmet",
+  "hel-met",
   () => {
     const result = ref<{ image: string; result: any } | null>({
       image: "",

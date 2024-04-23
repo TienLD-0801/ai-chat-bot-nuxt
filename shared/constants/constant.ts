@@ -64,3 +64,5 @@ export const DATA_HAND_SIGN = [
 ];
 
 export const HAND_SIGN_RESULT = "The gesture type";
+
+export const TIME_OUT_BACK: number = 30;
