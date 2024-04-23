@@ -14,14 +14,12 @@
     </div>
   </main>
 </template>
-<script lang="js" setup>
-definePageMeta({
-  middleware: "main-guard"
-});
+<script lang="ts" setup>
+const { $session_id } = useNuxtApp();
 const { start, stream, stop } = useCamera();
 const { setDataMain, resetData } = useMainStore();
-const video = ref();
-const canvasElement = ref(null);
+const video = ref<HTMLVideoElement | null>(null);
+const canvasElement = ref<HTMLCanvasElement | null>(null);
 
 const captureScreen = () => {
   if (!video.value || !canvasElement.value) return;
@@ -39,12 +37,12 @@ const captureScreen = () => {
   fetchAPI(imageData.replace("data:image/png;base64,", ""));
 };
 
-const fetchAPI = async (imageCapture) => {
+const fetchAPI = async (imageCapture: string) => {
   try {
-    const urlAPI = "https://demo20.ai.bnksolution.com/welcome/predict";
-    const { message } = await $fetch(urlAPI, {
+    const { message } = await $fetch(API_WElCOME, {
       method: "POST",
       body: {
+        session_id: $session_id,
         image: JSON.stringify(imageCapture),
       },
     });
@@ -54,11 +52,9 @@ const fetchAPI = async (imageCapture) => {
   }
 };
 
-
 const interValCapture = setInterval(() => {
   captureScreen();
 }, 16000);
-
 
 onUnmounted(() => {
   stop();
@@ -69,52 +65,9 @@ onUnmounted(() => {
 watchEffect(() => {
   start();
   if (video.value) {
-    video.value.srcObject = stream.value;
+    video.value.srcObject = stream.value!;
   }
 });
-
-
-// const valueVoice = ref('')
-
-// let recognition = null;
-
-// const toggleTranscription = () => {
-//   if (recognition) {
-//     // recognition = null;
-//   } else {
-//     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-//     recognition = new SpeechRecognition();
-//     recognition.continuous = true;
-//     recognition.interimResults = true;
-//     recognition.lang = "en-US";
-//     recognition.onresult = (event) => {
-//       let newTranscript = "";
-//       for (let i = event.resultIndex; i < event.results.length; ++i) {
-//         if (event.results[i].isFinal) {
-//           newTranscript += event.results[i][0].transcript;
-//           valueVoice.value = newTranscript
-//         } else {
-//           newTranscript += event.results[i][0].transcript + "...";
-//         }
-//         // timestamp.value = `Timestamp: ${performance.now()}`;
-//       }
-//     };
-//   }
-//   recognition.start();
-// };
-
-// watch(valueVoice, ()=> {
-//   console.log('change',valueVoice.value);
-//     if(valueVoice.value.toLocaleUpperCase().includes('GO TO CHAT')){
-//       navigateTo('/ChatBot')
-//     }else if (valueVoice.value.toLocaleUpperCase().includes('GO TO HANDSIGN')){
-//       console.log('change');
-//     }
-// })
-
-// watchEffect(()=>{
-//   toggleTranscription();
-// })
 </script>
 
 <style lang="scss" scoped>

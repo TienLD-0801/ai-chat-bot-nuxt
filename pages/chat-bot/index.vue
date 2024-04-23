@@ -33,106 +33,100 @@
   </main>
 </template>
 
-<script lang="js" setup>
-import { useSpeechRecognition } from '@vueuse/core';
-
-definePageMeta({
-  middleware: "main-guard",
-});
-
+<script lang="ts" setup>
+import { useSpeechRecognition } from "@vueuse/core";
+const { $session_id } = useNuxtApp();
 const { ws } = useSocket();
-const videoURL = ref("");
-const mutedBot = ref(false)
+const videoURL = ref<string>("");
+const mutedBot = ref<boolean>(false);
 const messageStore = useMessageStore();
-const {start , stop , recognition} = useSpeechRecognition({
+const { start, stop, recognition } = useSpeechRecognition({
   continuous: true,
-})
+});
+const videoChatBot = ref<HTMLVideoElement | null>(null);
+const isPending = ref<boolean>(false);
 
 onBeforeMount(() => {
   ws.onmessage = (evt) => {
-    videoURL.value = evt.data
+    videoURL.value = evt.data;
   };
-
 });
 
-const videoChatBot = ref();
-const timestamp = ref(0);
-const isPending = ref(false)
+onMounted(() => {
+  if (!videoChatBot.value) return;
 
-onMounted(()=> {
-  videoChatBot.value.addEventListener('playing', ()=> {
+  videoChatBot.value.addEventListener("playing", () => {
     stop();
-  })
-  videoChatBot.value.addEventListener('pause', ()=> {
-   start();
-  })
-})
-
+  });
+  videoChatBot.value.addEventListener("pause", () => {
+    start();
+  });
+});
 
 const toggleTranscription = () => {
-  if(!recognition) return
-    const chatId = messageStore.$state.message.chatId;
-    recognition.onresult = (event) => {
-      let newTranscript = "";
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          newTranscript += event.results[i][0].transcript;
-          messageStore.setMessage({ name: 'user', answer: newTranscript });
-          mutedBot.value = true;
-          callAPIChatBot(newTranscript,chatId);
-        } else {
-          newTranscript += event.results[i][0].transcript + "...";
-        }
-        timestamp.value = `Timestamp: ${performance.now()}`;
+  if (!recognition) return;
+  const chatId = messageStore.$state.message.chatId;
+  recognition.onresult = (event) => {
+    let newTranscript = "";
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        newTranscript += event.results[i][0].transcript;
+        messageStore.setMessage({ name: "user", answer: newTranscript });
+        mutedBot.value = true;
+        callAPIChatBot(newTranscript, chatId);
+      } else {
+        newTranscript += event.results[i][0].transcript + "...";
       }
+    }
+  };
+  mutedBot.value = false;
+};
 
-    };
-    mutedBot.value = false;
-}
-
-
-const callAPIChatBot = async (queryMsg , chatId) => {
+const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
   stop();
   const params = {
     inputs: {
       chat_mode: "Conversating",
       environment_des: "a man wearing a brown suit.",
+      session_id: $session_id,
     },
     query: queryMsg,
     response_mode: "blocking",
-    conversation_id: chatId ?? '',
+    conversation_id: chatId ?? "",
     user: "abc-123",
     files: [],
   };
 
   try {
     isPending.value = true;
-    const data = await $fetch("http://209.38.250.27/v1/chat-messages", {
+    const data = await $fetch(API_CHAT_BOT, {
       headers: { Authorization: "Bearer app-eeoA2WVkK0EJZDone7RFPg4w" },
       method: "POST",
       body: JSON.stringify(params),
     });
-    messageStore.setMessage({ name: 'bot', answer: data.answer, chatId: data.conversation_id });
-    console.log('data', data.answer);
+    messageStore.setMessage({
+      name: "bot",
+      answer: data.answer,
+      chatId: data.conversation_id,
+    });
+    console.log("data", data.answer);
   } catch (error) {
     console.log(error);
-  }finally{
+  } finally {
     isPending.value = false;
     start();
   }
 };
 
-
-onUnmounted(()=> {
+onUnmounted(() => {
   messageStore.resetData();
   stop();
 });
 
-
-watchEffect(()=> {
+watchEffect(() => {
   toggleTranscription();
   start();
-})
+});
 </script>
 
 <style lang="scss" scoped>

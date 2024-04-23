@@ -31,7 +31,7 @@ const isShowPopup = ref<boolean>(false);
 const isShowReady = ref<boolean>(false);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
 const numberCountDown = ref<number>(0);
-const title = ref("");
+const title = ref<string>("");
 const helmet = useHelmet();
 const { isAction, handleDetectAction } = useGoBack();
 

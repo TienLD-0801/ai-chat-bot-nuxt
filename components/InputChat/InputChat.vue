@@ -4,7 +4,7 @@
       <img
         loading="lazy"
         src="~/assets/svg/close.svg"
-        @lick="navigateTo('/')"
+        @click="navigateTo(PATH.MAIN)"
       />
       <input disabled />
       <img loading="lazy" style="flex: 1" src="~/assets/svg/send.svg" />
