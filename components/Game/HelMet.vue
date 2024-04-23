@@ -137,6 +137,7 @@ onBeforeMount(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   &__item {
     position: relative;
@@ -160,12 +161,11 @@ onBeforeMount(() => {
   }
 
   &__button-wrapper {
+    margin-top: 40px;
     width: 100%;
-    bottom: 100px;
-    position: absolute;
     display: flex;
     justify-content: center;
-    height: 138px;
+    height: 120px;
 
     &__container {
       background: linear-gradient(89.25deg, #3abf38 0.54%, #008b90 99.35%);
@@ -216,8 +216,6 @@ onBeforeMount(() => {
   padding: 15px 15px;
   border-radius: 10px;
   background: gray;
-  position: absolute;
-  bottom: 30px;
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
