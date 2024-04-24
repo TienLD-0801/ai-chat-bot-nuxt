@@ -3,26 +3,23 @@
     <div class="layout">
       <Header titleHeader="AI CHATBOT AUTOMATON" />
       <div class="wrapper-img">
-        <video
-          class="video-default"
-          src="https://hannover1.korenext.com/video/no_sound_extcrop.mp4"
-          autoplay
-          loop
-        />
+        <video class="video-default" src="/video/default.mp4" autoplay loop />
         <video ref="videoChatBot" class="video-real" :src="videoURL" autoplay />
       </div>
       <div class="content">
         <div
           class="content__message"
           v-for="item in messageStore.$state.message.content"
-          :key="item.answer"
+          :key="item.msgId"
           :class="{
             'user-message': item.name === 'user',
             'bot-message': item.name === 'bot',
           }"
         >
           <div class="content__message__item">
-            <p class="msg">{{ item.answer }}</p>
+            <p class="msg">
+              {{ item.answer }}
+            </p>
           </div>
         </div>
         <div class="content__pending" v-show="isPending">Processing ...</div>
@@ -35,22 +32,24 @@
 
 <script lang="ts" setup>
 import { useSpeechRecognition } from "@vueuse/core";
-const { $session_id } = useNuxtApp();
-const { ws } = useSocket();
-const videoURL = ref<string>("");
-const mutedBot = ref<boolean>(false);
-const messageStore = useMessageStore();
 const { start, stop, recognition } = useSpeechRecognition({
   continuous: true,
 });
+const { $session_id } = useNuxtApp();
+const { $ws } = useNuxtApp();
+const videoURL = ref<string>("");
+const mutedBot = ref<boolean>(false);
+const messageStore = useMessageStore();
+const conversionId = ref<string>("");
+const answer = ref<string>("");
 const videoChatBot = ref<HTMLVideoElement | null>(null);
 const isPending = ref<boolean>(false);
 
 onBeforeMount(() => {
-  ws.onmessage = (evt) => {
+  $ws.onmessage = (evt) => {
     const convertJSON: { msg: string; url: string } = JSON.parse(evt.data);
     videoURL.value = convertJSON.url;
-    stop();
+    answer.value = convertJSON.msg as string;
   };
 });
 
@@ -58,15 +57,18 @@ onMounted(() => {
   if (!videoChatBot.value) return;
   videoChatBot.value.addEventListener("playing", () => {
     console.log("video playing");
+    messageStore.setMessage({
+      msgId: (Math.floor(Math.random() * 10000) + 1).toString(),
+      name: "bot",
+      answer: answer.value,
+      chatId: conversionId.value,
+    });
     stop();
   });
 
-  // videoChatBot.value.addEventListener("pause", () => {
-  //   console.log("video pause");
-  // });
-
   videoChatBot.value.addEventListener("pause", () => {
     console.log("video pause");
+    videoURL.value = "";
     start();
   });
 });
@@ -79,7 +81,11 @@ const toggleTranscription = () => {
     for (let i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         newTranscript += event.results[i][0].transcript;
-        messageStore.setMessage({ name: "user", answer: newTranscript });
+        messageStore.setMessage({
+          msgId: (Math.floor(Math.random() * 10000) + 1).toString(),
+          name: "user",
+          answer: newTranscript,
+        });
         mutedBot.value = true;
         stop();
         callAPIChatBot(newTranscript, chatId);
@@ -113,12 +119,7 @@ const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
       method: "POST",
       body: JSON.stringify(params),
     });
-    messageStore.setMessage({
-      name: "bot",
-      answer: data.answer,
-      chatId: data.conversation_id,
-    });
-    console.log("data", data.answer);
+    conversionId.value = data.conversation_id;
   } catch (error) {
     console.log(error);
   } finally {

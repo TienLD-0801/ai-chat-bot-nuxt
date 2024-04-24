@@ -6,7 +6,7 @@
         <div class="wrapper__content__stream">
           <video
             class="wrapper__content__stream__default"
-            src="https://hannover1.korenext.com/video/no_sound_extcrop.mp4"
+            src="/video/default.mp4"
             name="test"
             height="400"
             width="300"
@@ -31,13 +31,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-const { ws } = useSocket();
+const { $ws } = useNuxtApp();
 const videoURL = ref<string>(
   "https://hannover1.korenext.com/video/no_sound_extcrop.mp4"
 );
 
 onMounted(() => {
-  ws.onmessage = (evt) => {
+  $ws.onmessage = (evt) => {
     const convertJSON = JSON.parse(evt.data);
     videoURL.value = convertJSON.url;
   };
