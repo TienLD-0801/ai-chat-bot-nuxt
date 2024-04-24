@@ -50,16 +50,23 @@ onBeforeMount(() => {
   ws.onmessage = (evt) => {
     const convertJSON: { msg: string; url: string } = JSON.parse(evt.data);
     videoURL.value = convertJSON.url;
+    stop();
   };
 });
 
 onMounted(() => {
   if (!videoChatBot.value) return;
-
   videoChatBot.value.addEventListener("playing", () => {
+    console.log("video playing");
     stop();
   });
+
+  // videoChatBot.value.addEventListener("pause", () => {
+  //   console.log("video pause");
+  // });
+
   videoChatBot.value.addEventListener("pause", () => {
+    console.log("video pause");
     start();
   });
 });
@@ -74,6 +81,7 @@ const toggleTranscription = () => {
         newTranscript += event.results[i][0].transcript;
         messageStore.setMessage({ name: "user", answer: newTranscript });
         mutedBot.value = true;
+        stop();
         callAPIChatBot(newTranscript, chatId);
       } else {
         newTranscript += event.results[i][0].transcript + "...";
@@ -81,10 +89,10 @@ const toggleTranscription = () => {
     }
   };
   mutedBot.value = false;
+  stop();
 };
 
 const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
-  stop();
   const params = {
     inputs: {
       chat_mode: "Conversating",
@@ -115,7 +123,6 @@ const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
     console.log(error);
   } finally {
     isPending.value = false;
-    start();
   }
 };
 
@@ -124,9 +131,12 @@ onUnmounted(() => {
   stop();
 });
 
+onMounted(() => {
+  start();
+});
+
 watchEffect(() => {
   toggleTranscription();
-  start();
 });
 </script>
 

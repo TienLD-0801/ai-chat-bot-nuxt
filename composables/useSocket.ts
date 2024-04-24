@@ -1,8 +1,6 @@
 export const useSocket = () => {
   const { $session_id } = useNuxtApp();
-  const ws = new WebSocket(
-    `wss://hannover2.korenext.com/?session_id=${$session_id}`
-  );
+  const ws = new WebSocket(`${API_SOCKET}${$session_id}`);
 
   ws.onopen = () => {
     console.log(
