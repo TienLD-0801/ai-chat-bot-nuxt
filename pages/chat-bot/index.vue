@@ -48,7 +48,8 @@ const isPending = ref<boolean>(false);
 
 onBeforeMount(() => {
   ws.onmessage = (evt) => {
-    videoURL.value = evt.data;
+    const convertJSON: { msg: string; url: string } = JSON.parse(evt.data);
+    videoURL.value = convertJSON.url;
   };
 });
 

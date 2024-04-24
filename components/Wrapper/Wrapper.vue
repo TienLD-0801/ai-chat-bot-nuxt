@@ -32,11 +32,14 @@
 </template>
 <script lang="ts" setup>
 const { ws } = useSocket();
-const videoURL = ref<string>("https://hannover1.korenext.com/video/no_sound_extcrop.mp4");
+const videoURL = ref<string>(
+  "https://hannover1.korenext.com/video/no_sound_extcrop.mp4"
+);
 
 onMounted(() => {
   ws.onmessage = (evt) => {
-    videoURL.value = evt.data as string;
+    const convertJSON = JSON.parse(evt.data);
+    videoURL.value = convertJSON.url;
   };
 });
 </script>
