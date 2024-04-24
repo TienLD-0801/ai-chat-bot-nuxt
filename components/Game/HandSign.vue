@@ -153,7 +153,7 @@ watchEffect(() => {
 }
 
 .button-handsign-again {
-  margin-top: 40px;
+  margin-top: 30px;
   padding: 15px 15px;
   border-radius: 10px;
   background: gray;

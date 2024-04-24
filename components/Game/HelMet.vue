@@ -35,8 +35,8 @@
 
       <img
         style="border-radius: 30px"
-        width="538"
-        height="595"
+        width="550"
+        height="700"
         :src="resultComputed"
         class="game-helmet__capture"
         v-else
@@ -148,7 +148,7 @@ onBeforeMount(() => {
 
   &__item {
     position: relative;
-    margin-top: 70px;
+    margin-top: 60px;
     object-fit: cover;
     display: flex;
     align-items: center;
@@ -218,7 +218,7 @@ onBeforeMount(() => {
 
 .button-helmet-again {
   padding: 15px 15px;
-  margin-top: 40px;
+  margin-top: 30px;
   border-radius: 10px;
   background: gray;
   color: #ffffff;
