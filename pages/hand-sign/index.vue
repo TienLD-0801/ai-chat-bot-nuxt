@@ -82,6 +82,7 @@ const fetchAPI = async (imageCapture: string) => {
     console.log("error ", error);
   } finally {
     isShowPopup.value = false;
+    isAction.value = false;
     handleDetectAction(TIME_OUT_BACK);
   }
 };

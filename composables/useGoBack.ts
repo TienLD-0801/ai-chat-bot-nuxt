@@ -17,5 +17,10 @@ export const useGoBack = () => {
     }, 1000);
   };
 
+  onUnmounted(() => {
+    isAction.value = true;
+    console.log("destroy go back");
+  });
+
   return { isAction, handleDetectAction };
 };

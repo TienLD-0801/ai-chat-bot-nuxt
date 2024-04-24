@@ -45,6 +45,9 @@
     <div class="game-helmet__button-wrapper">
       <div
         class="game-helmet__button-wrapper__container"
+        :style="
+          !isCheckAnswer && !textResult ? 'padding: 35px; min-width:0' : ''
+        "
         @click.stop="!textResult ? $emit('on-click-ready') : undefined"
       >
         <img
@@ -69,7 +72,11 @@
               : 'game-helmet__button-wrapper__container__wrong'
           "
         >
-          {{ textResult }}
+          {{
+            textResult === "CONGRATULATION!!! You are wearing a helmet."
+              ? "CONGRATULATION!!!\n You are wearing a helmet."
+              : "SOMETHING WRONG!!!\n Please wear the helmet!"
+          }}
         </p>
         <p
           v-show="!isCheckAnswer && !textResult"
@@ -147,11 +154,11 @@ onBeforeMount(() => {
     align-items: center;
     justify-content: center;
     max-width: 640px;
-    height: 590px;
+    height: 700px;
 
     &__img {
       position: absolute;
-      bottom: 540px;
+      top: -50px;
     }
 
     video {
@@ -165,7 +172,6 @@ onBeforeMount(() => {
     width: 100%;
     display: flex;
     justify-content: center;
-    height: 120px;
 
     &__container {
       background: linear-gradient(89.25deg, #3abf38 0.54%, #008b90 99.35%);
@@ -175,10 +181,10 @@ onBeforeMount(() => {
       align-items: center;
       gap: 15px;
       padding: 23px 26px 17px 35px;
+      min-width: 450px;
 
       &__title {
         margin: 0;
-        max-width: 350px;
         display: inline;
         font-size: 26px;
         font-weight: 600;
@@ -189,7 +195,6 @@ onBeforeMount(() => {
 
       &__success {
         margin: 0;
-        max-width: 350px;
         display: inline;
         font-size: 26px;
         font-weight: 600;
@@ -200,7 +205,6 @@ onBeforeMount(() => {
 
       &__wrong {
         margin: 0;
-        max-width: 350px;
         display: inline;
         font-size: 26px;
         font-weight: 600;

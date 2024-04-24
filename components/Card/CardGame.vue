@@ -21,7 +21,7 @@ defineProps<{
 }>();
 
 const handleNavigateGame = (item: GameType) => {
-  navigateTo(item.path);
+  navigateTo(item.path, { replace: true });
 };
 </script>
 
