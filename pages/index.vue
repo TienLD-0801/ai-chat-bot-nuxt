@@ -48,18 +48,32 @@ const fetchAPI = async (imageCapture: string) => {
     });
     setDataMain(message);
   } catch (error) {
-    console.log("error ", error);
+    console.log(
+      `%c ${error}`,
+      "background:#f44336; color: #FFFFFF; font-size: 20px; font-weight: 800; border-radius: 10px; padding: 2px 0.5em;"
+    );
   }
 };
 
 const interValCapture = setInterval(() => {
   captureScreen();
-}, 16000);
+}, 14000);
 
 onUnmounted(() => {
   stop();
   clearInterval(interValCapture);
   resetData();
+});
+
+onMounted(() => {
+  const startTimeOut = setTimeout(() => {
+    console.log(
+      "%c start time out call api first !!!",
+      "background:#2196F3; color: #FFFFFF; font-size: 20px; font-weight: 800; border-radius: 10px; padding: 2px 0.5em;"
+    );
+    captureScreen();
+    clearTimeout(startTimeOut);
+  }, 1500);
 });
 
 watchEffect(() => {

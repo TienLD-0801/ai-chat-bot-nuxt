@@ -13,7 +13,10 @@ export const useCamera = () => {
     stop();
   }
 
-  console.log("Camera is ready !!!");
+  console.log(
+    "%c Camera is ready !!!",
+    "background:#2196F3; color: #FFFFFF; font-size: 20px; font-weight: 800; border-radius: 10px; padding: 2px 0.5em;"
+  );
 
   return { stream, start, stop, isSupported, restart };
 };
