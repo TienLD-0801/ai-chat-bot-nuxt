@@ -16,6 +16,7 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  plugins: [{ src: "~/plugins/app.client.ts", mode: "client" }],
   modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
   imports: {
     dirs: ["./shared/*"],
