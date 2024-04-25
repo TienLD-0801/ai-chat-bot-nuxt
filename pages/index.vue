@@ -20,6 +20,7 @@ const { start, stream, stop } = useCamera();
 const { setDataMain, resetData } = useMainStore();
 const video = ref<HTMLVideoElement | null>(null);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
+const currentController = ref<AbortController | null>(null);
 
 const captureScreen = () => {
   if (!video.value || !canvasElement.value) return;
@@ -38,8 +39,12 @@ const captureScreen = () => {
 };
 
 const fetchAPI = async (imageCapture: string) => {
+  if (!currentController.value) return;
+  const signal = currentController.value.signal;
+
   try {
     const { message } = await $fetch(API_WElCOME, {
+      signal: signal,
       method: "POST",
       body: {
         session_id: $session_id,
@@ -60,12 +65,17 @@ const interValCapture = setInterval(() => {
 }, 14000);
 
 onUnmounted(() => {
-  stop();
+  if (currentController.value) {
+    currentController.value.abort();
+  }
+  currentController.value = null;
   clearInterval(interValCapture);
   resetData();
+  stop();
 });
 
 onMounted(() => {
+  currentController.value = new AbortController();
   const startTimeOut = setTimeout(() => {
     console.log(
       "%c start time out call api first !!!",
@@ -74,10 +84,10 @@ onMounted(() => {
     captureScreen();
     clearTimeout(startTimeOut);
   }, 1500);
+  start();
 });
 
 watchEffect(() => {
-  start();
   if (video.value) {
     video.value.srcObject = stream.value!;
   }

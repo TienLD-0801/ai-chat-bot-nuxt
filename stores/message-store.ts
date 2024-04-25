@@ -6,7 +6,6 @@ export type MessageList = {
 
 export type Message = {
   content: MessageList[];
-  chatId?: string;
 };
 
 export const useMessageStore = defineStore("message", () => {
@@ -29,7 +28,6 @@ export const useMessageStore = defineStore("message", () => {
         name: payload.name,
         answer: payload.answer,
       });
-      message.value.chatId = payload.chatId ?? "";
     } else {
       message.value.content.splice(-1);
       message.value.content.unshift({
@@ -37,14 +35,12 @@ export const useMessageStore = defineStore("message", () => {
         name: payload.name,
         answer: payload.answer,
       });
-      message.value.chatId = payload.chatId ?? "";
     }
   };
 
   const resetData = () => {
     message.value = {
       content: [],
-      chatId: "",
     };
   };
 

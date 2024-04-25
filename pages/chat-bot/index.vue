@@ -24,7 +24,7 @@
         </div>
         <div class="content__pending" v-show="isPending">Processing ...</div>
       </div>
-      <ControlChat />
+      <ControlChat :isShowIcon="isShowIcon" @on-micro="handleMicro" />
       <InputChat />
     </div>
   </main>
@@ -32,18 +32,18 @@
 
 <script lang="ts" setup>
 import { useSpeechRecognition } from "@vueuse/core";
-const { start, stop, recognition } = useSpeechRecognition({
+const { recognition } = useSpeechRecognition({
   continuous: true,
 });
 const { $session_id } = useNuxtApp();
 const { $ws } = useNuxtApp();
 const videoURL = ref<string>("");
-const mutedBot = ref<boolean>(false);
 const messageStore = useMessageStore();
 const conversionId = ref<string>("");
 const answer = ref<string>("");
 const videoChatBot = ref<HTMLVideoElement | null>(null);
 const isPending = ref<boolean>(false);
+const isShowIcon = ref<boolean>(true);
 
 onBeforeMount(() => {
   $ws.onmessage = (evt) => {
@@ -53,30 +53,32 @@ onBeforeMount(() => {
   };
 });
 
+const handleMicro = () => {
+  isShowIcon.value = true;
+  recognition!.start();
+};
+
 onMounted(() => {
   if (!videoChatBot.value) return;
-  videoChatBot.value.addEventListener("playing", () => {
-    console.log("video playing");
+  videoChatBot.value.addEventListener("playing", (e) => {
+    console.log("video playing", e);
     messageStore.setMessage({
       msgId: (Math.floor(Math.random() * 10000) + 1).toString(),
       name: "bot",
       answer: answer.value,
-      chatId: conversionId.value,
     });
-    stop();
+    isPending.value = false;
   });
 
   videoChatBot.value.addEventListener("pause", () => {
     console.log("video pause");
     videoURL.value = "";
-    start();
+    recognition!.start();
   });
 });
 
 const toggleTranscription = () => {
-  if (!recognition) return;
-  const chatId = messageStore.$state.message.chatId;
-  recognition.onresult = (event) => {
+  recognition!.onresult = (event) => {
     let newTranscript = "";
     for (let i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
@@ -86,19 +88,21 @@ const toggleTranscription = () => {
           name: "user",
           answer: newTranscript,
         });
-        mutedBot.value = true;
-        stop();
-        callAPIChatBot(newTranscript, chatId);
+        recognition!.stop();
+        callAPIChatBot(newTranscript);
       } else {
         newTranscript += event.results[i][0].transcript + "...";
       }
     }
   };
-  mutedBot.value = false;
-  stop();
+
+  recognition!.onerror = (e) => {
+    console.log(e);
+    isShowIcon.value = false;
+  };
 };
 
-const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
+const callAPIChatBot = async (queryMsg: string) => {
   const params = {
     inputs: {
       chat_mode: "Conversating",
@@ -107,7 +111,7 @@ const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
     },
     query: queryMsg,
     response_mode: "blocking",
-    conversation_id: chatId ?? "",
+    conversation_id: conversionId.value ?? "",
     user: "abc-123",
     files: [],
   };
@@ -122,22 +126,17 @@ const callAPIChatBot = async (queryMsg: string, chatId?: string) => {
     conversionId.value = data.conversation_id;
   } catch (error) {
     console.log(error);
-  } finally {
-    isPending.value = false;
   }
 };
 
 onUnmounted(() => {
   messageStore.resetData();
-  stop();
+  recognition!.stop();
 });
 
 onMounted(() => {
-  start();
-});
-
-watchEffect(() => {
   toggleTranscription();
+  recognition!.start();
 });
 </script>
 
