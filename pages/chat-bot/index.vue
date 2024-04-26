@@ -119,7 +119,7 @@ const callAPIChatBot = async (queryMsg: string) => {
   try {
     isPending.value = true;
     const data = await $fetch(API_CHAT_BOT, {
-      headers: { Authorization: "Bearer app-eeoA2WVkK0EJZDone7RFPg4w" },
+      headers: { Authorization: API_TOKEN_CHAT_BOT },
       method: "POST",
       body: JSON.stringify(params),
     });
