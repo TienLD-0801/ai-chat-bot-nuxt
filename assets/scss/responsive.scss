@@ -1,6 +1,0 @@
-$tablet-width: 700px; 
-
-@mixin device { @media (max-width: #{$tablet-width}) {       
-  @content;   
- } 
-} 
