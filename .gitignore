@@ -23,3 +23,10 @@ logs
 .env
 .env.*
 !.env.example
+
+*/**/yarn.lock
+package-lock.json
+
+# VSCode
+.vscode
+
