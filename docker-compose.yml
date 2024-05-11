@@ -1,11 +1,17 @@
 version: '3.1'
 services:
-  bnk-chat-bot:
+  app:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: bnk-chat-bot
-    image: bnk-chat-bot
+    container_name: app
     restart: always
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
     ports:
-      - "3500:80"
+      - "80:80"

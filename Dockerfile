@@ -1,34 +1,45 @@
-FROM node:latest as build-stage
+# base image
+FROM node:lts AS base
+LABEL maintainer="tienld@gmail.com"
 
+# install packages
+FROM base as packages
 
 WORKDIR /app
 
+COPY package.json .
+COPY yarn.lock .
 
-COPY package*.json ./
+RUN yarn install --frozen-lockfile
 
+# build resources
+FROM base as builder
 
-RUN yarn install
+WORKDIR /app
 
-
+COPY --from=packages /app .
 COPY . .
 
-
-RUN yarn build && yarn generate
-
-
-FROM nginx:latest as production-stage
+RUN yarn build
 
 
-RUN rm -rf /usr/share/nginx/html/*
+# production stage
+FROM base as production
+
+# global runtime packages
+RUN yarn global add pm2 \
+    && yarn cache clean
+
+WORKDIR /app
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/build ./build
+
+COPY docker/pm2.json ./pm2.json
+COPY docker/entrypoint.sh ./entrypoint.sh
 
 
-COPY ./nginx/default.conf /etc/nginx/conf.d
+EXPOSE 3000
 
-
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-
-EXPOSE 80
-
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]

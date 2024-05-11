@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "chat-nuxt",
+      "script": "/app/.output/server/index.mjs",
+      "cwd": "/app",
+      "exec_mode": "cluster",
+      "instances": 2
+    }
+  ]
+} 
