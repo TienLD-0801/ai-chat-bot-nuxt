@@ -10,7 +10,7 @@ services:
     image: nginx:latest
     restart: always
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./docker/nginx:/etc/nginx/conf.d
     depends_on:
       - app
     ports:
