@@ -12,6 +12,7 @@ export default defineNuxtConfig({
         { rel: "preload", href: "images/helmet.png", as: "image" },
         { rel: "preload", href: "images/sad.png", as: "image" },
         { rel: "preload", href: "images/firework.png", as: "image" },
+        { rel: "preload", href: "images/check-fail.png", as: "image" },
       ],
 
       meta: [{ name: "description", content: "Singapore Bot App" }],
