@@ -2,11 +2,12 @@ const path = require("path");
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "BnK-Chat-Bot",
+      title: "Singapore Bot",
       htmlAttrs: {
         lang: "en",
       },
-      meta: [{ name: "description", content: "BnK Chat Bot App" }],
+      link: [{ rel: "icon", type: "image/png", href: "images/helmet.png" }],
+      meta: [{ name: "description", content: "Singapore Bot App" }],
     },
   },
   devtools: { enabled: false },
