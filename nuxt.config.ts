@@ -6,7 +6,14 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en",
       },
-      link: [{ rel: "icon", type: "image/png", href: "images/helmet.png" }],
+      link: [
+        { rel: "icon", type: "image/png", href: "images/helmet.png" },
+        { rel: "preload", href: "images/check-mark.png", as: "image" },
+        { rel: "preload", href: "images/helmet.png", as: "image" },
+        { rel: "preload", href: "images/sad.png", as: "image" },
+        { rel: "preload", href: "images/firework.png", as: "image" },
+      ],
+
       meta: [{ name: "description", content: "Singapore Bot App" }],
     },
   },

@@ -38,6 +38,7 @@ const helmet = useHelmet();
 
 const handleActionTryMore = () => {
   helmet.resetValue();
+  navigateTo("/");
 };
 
 const handleClickReady = () => {
@@ -70,9 +71,9 @@ const captureScreen = () => {
   canvas.height = videoGame.value.videoHeight;
 
   context.drawImage(videoGame.value, 0, 0);
-  const imageData = canvas.toDataURL("image/png");
+  const imageData = canvas.toDataURL("image/jpg");
   console.log(imageData);
-  fetchAPI(imageData.replace("data:image/png;base64,", ""));
+  fetchAPI(imageData.replaceAll("data:image/png;base64,", ""));
 };
 
 const fetchAPI = async (imageCapture: string) => {
