@@ -21,7 +21,6 @@
 
 <script lang="ts" setup>
 const { start, stream } = useCamera();
-const { isAction, handleDetectAction } = useGoBack();
 const videoGame = ref<HTMLVideoElement>();
 const isShowPopup = ref<boolean>(false);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
@@ -31,7 +30,6 @@ const helmet = useHelmet();
 
 const handleActionTryMore = () => {
   helmet.resetValue();
-  isAction.value = true;
 };
 
 const handleClickReady = () => {
@@ -85,8 +83,6 @@ const fetchAPI = async (imageCapture: string) => {
     console.log("error ", error);
   } finally {
     isShowPopup.value = false;
-    isAction.value = false;
-    handleDetectAction(TIME_OUT_BACK);
   }
 };
 
