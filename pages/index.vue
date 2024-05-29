@@ -61,19 +61,31 @@ const countdown = (number: number) => {
 };
 
 const captureScreen = () => {
-  if (!videoGame.value || !canvasElement.value) return;
-  const canvas = canvasElement.value;
+  const video = videoGame.value; // Giá trị video từ phần tử video game
+  const canvas = canvasElement.value; // Giá trị canvas từ phần tử canvas
+
+  if (!video || !canvas) {
+    console.error("Video hoặc Canvas không hợp lệ.");
+    return;
+  }
+
   const context = canvas.getContext("2d");
+  if (!context) {
+    console.error("Không thể lấy context từ canvas.");
+    return;
+  }
 
-  if (!context) return;
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
 
-  canvas.width = videoGame.value.videoWidth;
-  canvas.height = videoGame.value.videoHeight;
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
-  context.drawImage(videoGame.value, 0, 0);
-  const imageData = canvas.toDataURL("image/jpg");
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const imageData = canvas.toDataURL("image/png");
   console.log(imageData);
-  fetchAPI(imageData.replaceAll("data:image/png;base64,", ""));
+
+  fetchAPI(imageData.replace("data:image/png;base64,", ""));
 };
 
 const fetchAPI = async (imageCapture: string) => {
