@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   app:
-    image: leduytien0801/chat-bot:latest
+    image: leduytien0801/bnk-hanover-web:latest
   nginx:
     image: nginx:latest
     restart: always
@@ -11,3 +11,4 @@ services:
       - app
     ports:
       - "80:80"
+ 
