@@ -5,11 +5,6 @@ export const DATA_GAME: GameType[] = [
     path: PATH.HAND_SIGN,
     title: "REVERSED JEOPARDY",
   },
-  // {
-  //   id: "2",
-  //   image: "images/game_2.png",
-  //   title: "CHROMAAI: SHIRT EDITION",
-  // },
   {
     id: "2",
     image: "images/game_3.png",
