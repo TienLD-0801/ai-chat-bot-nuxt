@@ -11,7 +11,15 @@
         @on-click-ready="handleClickReady"
         @on-try-more="handleActionTryMore"
       />
-      <video ref="videoGame" height="100%" width="100%" autoplay>
+      <video
+        ref="videoGame"
+        height="100%"
+        width="100%"
+        autoplay
+        loop
+        muted
+        playsinline
+      >
         <source type="video/mp4" />
         <canvas ref="canvasElement"></canvas>
       </video>

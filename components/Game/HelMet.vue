@@ -31,6 +31,9 @@
         height="100%"
         class="game-helmet__video"
         autoplay
+        loop
+        muted
+        playsinline
       />
 
       <img
