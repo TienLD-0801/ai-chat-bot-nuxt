@@ -34,10 +34,25 @@ export default defineNuxtConfig({
   },
   vite: {
     build: {
-      chunkSizeWarningLimit: 1600,
       minify: "terser",
       cssMinify: true,
       manifest: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              return id
+                .toString()
+                .split("node_modules/")[1]
+                .split("/")[0]
+                .toString();
+            }
+          },
+          assetFileNames: "assets/[name].[hash][extname]",
+          chunkFileNames: "assets/[name].[hash].js",
+          entryFileNames: "assets/[name].[hash].js",
+        },
+      },
     },
     css: {
       preprocessorOptions: {

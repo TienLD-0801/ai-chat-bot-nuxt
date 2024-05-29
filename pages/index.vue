@@ -1,124 +1,113 @@
 <template>
-  <main class="main-page">
+  <Popup
+    :title="title"
+    :numberCountDown="numberCountDown"
+    v-show="isShowPopup"
+  />
+  <main class="page-hel-met">
     <div class="layout">
-      <ContentTop />
-      <Wrapper />
-      <div class="road">
-        Interested in our capabilities, top offers and trends are detail at:
-      </div>
-      <ContentBottom />
-      <video class="video-test" ref="video" height="100%" width="100%" autoplay>
+      <Header titleHeader="HARDHAT HER0" />
+      <HelMet
+        @on-click-ready="handleClickReady"
+        @on-try-more="handleActionTryMore"
+      />
+      <video ref="videoGame" height="100%" width="100%" autoplay>
         <source type="video/mp4" />
         <canvas ref="canvasElement"></canvas>
       </video>
     </div>
   </main>
 </template>
+
 <script lang="ts" setup>
-const { $session_id } = useNuxtApp();
-const { start, stream, stop } = useCamera();
-const { setDataMain, resetData } = useMainStore();
-const video = ref<HTMLVideoElement | null>(null);
+const { start, stream } = useCamera();
+const { isAction, handleDetectAction } = useGoBack();
+const videoGame = ref<HTMLVideoElement>();
+const isShowPopup = ref<boolean>(false);
 const canvasElement = ref<HTMLCanvasElement | null>(null);
-const currentController = ref<AbortController | null>(null);
+const numberCountDown = ref<number>(0);
+const title = ref<string>("");
+const helmet = useHelmet();
+
+const handleActionTryMore = () => {
+  helmet.resetValue();
+  isAction.value = true;
+};
+
+const handleClickReady = () => {
+  isShowPopup.value = true;
+  title.value = "Capturing ...";
+  countdown(5);
+};
+
+const countdown = (number: number) => {
+  numberCountDown.value = number;
+  const interval = setInterval(() => {
+    number--;
+    if (number === 0) {
+      captureScreen();
+      title.value = "Processing ...";
+      clearInterval(interval);
+    }
+    numberCountDown.value = number;
+  }, 1000);
+};
 
 const captureScreen = () => {
-  if (!video.value || !canvasElement.value) return;
-
+  if (!videoGame.value || !canvasElement.value) return;
   const canvas = canvasElement.value;
   const context = canvas.getContext("2d");
 
   if (!context) return;
 
-  canvas.width = video.value.videoWidth;
-  canvas.height = video.value.videoHeight;
+  canvas.width = videoGame.value.videoWidth;
+  canvas.height = videoGame.value.videoHeight;
 
-  context.drawImage(video.value, 0, 0);
+  context.drawImage(videoGame.value, 0, 0);
   const imageData = canvas.toDataURL("image/png");
+  console.log(imageData);
   fetchAPI(imageData.replace("data:image/png;base64,", ""));
 };
 
 const fetchAPI = async (imageCapture: string) => {
-  if (!currentController.value) return;
-  const signal = currentController.value.signal;
-
   try {
-    const { message } = await $fetch(API_WElCOME, {
-      signal: signal,
+    const { message }: any = await $fetch(API_HELMET, {
       method: "POST",
       body: {
-        session_id: $session_id,
         image: JSON.stringify(imageCapture),
       },
     });
-    setDataMain(message);
+    helmet.setResult({
+      result: message,
+      image: `data:image/png;base64,${imageCapture}`,
+    });
   } catch (error) {
-    console.log(
-      `%c ${error}`,
-      "background:#f44336; color: #FFFFFF; font-size: 20px; font-weight: 800; border-radius: 10px; padding: 2px 0.5em;"
-    );
+    console.log("error ", error);
+  } finally {
+    isShowPopup.value = false;
+    isAction.value = false;
+    handleDetectAction(TIME_OUT_BACK);
   }
 };
 
-const interValCapture = setInterval(() => {
-  captureScreen();
-}, 14000);
-
-onUnmounted(() => {
-  if (currentController.value) {
-    currentController.value.abort();
-  }
-  currentController.value = null;
-  clearInterval(interValCapture);
-  resetData();
-  stop();
-});
-
-onMounted(() => {
-  currentController.value = new AbortController();
-  const startTimeOut = setTimeout(() => {
-    console.log(
-      "%c start time out call api first !!!",
-      "background:#2196F3; color: #FFFFFF; font-size: 20px; font-weight: 800; border-radius: 10px; padding: 2px 0.5em;"
-    );
-    captureScreen();
-    clearTimeout(startTimeOut);
-  }, 1500);
-  start();
-});
-
 watchEffect(() => {
-  if (video.value) {
-    video.value.srcObject = stream.value!;
+  if (videoGame.value) {
+    videoGame.value.srcObject = stream.value!;
   }
+});
+
+onBeforeMount(() => {
+  start();
 });
 </script>
 
 <style lang="scss" scoped>
-.main-page {
-  background: #000000;
-  display: flex;
-  height: 100vh;
-}
-
-.layout {
+.page-hel-met {
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
-  flex-wrap: wrap;
+  background: #eec252;
 }
 
-.road {
-  background: #00cb9b;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 22px;
-  color: #ffffff;
-  padding-left: 6px;
-}
-
-.video-test {
+video {
   visibility: hidden;
 }
 </style>
