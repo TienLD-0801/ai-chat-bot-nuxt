@@ -1,9 +1,9 @@
 {
   "apps": [
     {
-      "name": "chat-nuxt",
-      "script": "/app/.output/server/index.mjs",
-      "cwd": "/app",
+      "name": "hanover-web",
+      "script": "/hanover-web/.output/server/index.mjs",
+      "cwd": "/hanover-web",
       "exec_mode": "cluster",
       "instances": 2
     }
