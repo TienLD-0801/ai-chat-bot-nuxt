@@ -27,8 +27,6 @@
       <video
         v-if="!resultComputed"
         ref="videoHelmet"
-        width="100%"
-        height="100%"
         class="game-helmet__video"
         autoplay
         loop
@@ -38,10 +36,8 @@
 
       <img
         style="border-radius: 30px"
-        width="550"
-        height="700"
         :src="resultComputed"
-        class="game-helmet__capture"
+        class="game-helmet__item__capture"
         v-else
       />
     </div>
@@ -150,14 +146,25 @@ onBeforeMount(() => {
   flex-direction: column;
 
   &__item {
+    padding: 0 20px;
     position: relative;
     margin-top: 60px;
     object-fit: cover;
     display: flex;
-    align-items: center;
     justify-content: center;
     max-width: 640px;
-    height: 700px;
+    height: auto;
+
+    &__capture {
+      width: 100%;
+      height: 500px;
+
+      @media (max-width: 500px) {
+        height: auto;
+        width: 100%;
+        height: 380px;
+      }
+    }
 
     &__img {
       position: absolute;
@@ -167,11 +174,24 @@ onBeforeMount(() => {
     video {
       border-radius: 30px;
       object-fit: cover;
+      width: 100%;
+      height: 540px;
+
+      @media (max-width: 500px) {
+        height: auto;
+        width: 100%;
+        height: 380px;
+      }
     }
   }
 
   &__button-wrapper {
     margin-top: 60px;
+
+    @media (max-width: 500px) {
+      margin-top: 20px;
+    }
+
     width: 100%;
     display: flex;
     justify-content: center;
@@ -185,6 +205,10 @@ onBeforeMount(() => {
       gap: 15px;
       padding: 23px 26px 17px 35px;
       min-width: 450px;
+
+      @media (max-width: 500px) {
+        scale: 0.6;
+      }
 
       &__title {
         margin: 0;
@@ -227,5 +251,9 @@ onBeforeMount(() => {
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
+
+  @media (max-width: 500px) {
+    margin-top: 10px;
+  }
 }
 </style>
