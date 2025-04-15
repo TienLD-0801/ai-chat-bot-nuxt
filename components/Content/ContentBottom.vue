@@ -2,13 +2,9 @@
   <div class="container">
     <div class="container-wrapper">
       <div class="container-wrapper__image">
-        <img loading="lazy" src="~/assets/svg/bnk-logo-1.svg" />
+        <img loading="lazy" src="" />
       </div>
       <div class="container-wrapper__road" />
-      <div class="container-wrapper__text">
-        <div>Website: https://bnksolution.com/</div>
-        <div>Hotline: +84 247 301 3318</div>
-      </div>
     </div>
   </div>
 </template>

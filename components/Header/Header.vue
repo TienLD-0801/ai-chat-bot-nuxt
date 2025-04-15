@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="header__image">
-      <img loading="lazy" src="~assets/svg/bnk-logo-1.svg" />
+      <img loading="lazy" src="" />
     </div>
     <div class="header__text">
       <div>{{ titleHeader }}</div>

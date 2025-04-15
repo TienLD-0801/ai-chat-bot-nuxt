@@ -1,6 +1,6 @@
 # Variables
 DOCKER_REGISTRY=leduytien0801
-WEB_IMAGE=$(DOCKER_REGISTRY)/bnk-hanover-web
+WEB_IMAGE=$(DOCKER_REGISTRY)/ai-chat-bot-nuxt
 VERSION=latest
 
 # Build Docker images for web

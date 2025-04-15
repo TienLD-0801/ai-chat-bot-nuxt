@@ -1,7 +1,9 @@
 version: '3.1'
 services:
   hanover-web:
-    image: leduytien0801/bnk-hanover-web:latest
+   build:
+    context: .
+    dockerfile: Dockerfile
   nginx:
     image: nginx:latest
     restart: always
@@ -11,4 +13,3 @@ services:
       - hanover-web
     ports:
       - "80:80"
- 

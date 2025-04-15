@@ -2,11 +2,11 @@ const path = require("path");
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "BnK-Chat-Bot",
+      title: "AI-Chat-Bot-Nuxt",
       htmlAttrs: {
         lang: "en",
       },
-      meta: [{ name: "description", content: "BnK Chat Bot App" }],
+      meta: [{ name: "description", content: "AI Chat Bot App" }],
     },
   },
   devtools: { enabled: false },

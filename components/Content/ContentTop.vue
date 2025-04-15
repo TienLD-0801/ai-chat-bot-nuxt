@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="container__image">
-      <img loading="lazy" src="~assets/svg/bnk-logo.svg" />
+      <img loading="lazy" src="" />
       <img class="container__image__x" loading="lazy" src="~assets/svg/x.svg" />
     </div>
     <img loading="lazy" src="~assets/svg/logo-dark.svg" />

@@ -1,6 +1,6 @@
 <template>
   <div class="card-chat">
-    <div class="card-chat__title">BnK AI CHATBOT</div>
+    <div class="card-chat__title">AI Chatbot Nuxt</div>
     <div class="card-chat__title-first">
       Automated Assistant and Business Supporter
     </div>
