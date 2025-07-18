@@ -10,18 +10,7 @@ updates:
       docusaurus:
         patterns:
           - "@docusaurus/*"
-          - "docusaurus"
-  - package-ecosystem: "yarn"
-    directory: "/" 
-    labels:
-      - "🤖 Dependencies"
-    schedule:
-      interval: "daily"
-    groups:
-      docusaurus:
-        patterns:
-          - "@docusaurus/*"
-          - "docusaurus"        
+          - "docusaurus"     
   - package-ecosystem: "github-actions"
     directory: "/"
     labels:
