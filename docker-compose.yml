@@ -1,6 +1,5 @@
-version: '3.1'
 services:
-  hanover-web:
+  ai-chat-bot-nuxt:
    build:
     context: .
     dockerfile: Dockerfile
@@ -10,6 +9,6 @@ services:
     volumes:
       - ./docker/nginx:/etc/nginx/conf.d
     depends_on:
-      - hanover-web
+      - ai-chat-bot-nuxt
     ports:
       - "80:80"

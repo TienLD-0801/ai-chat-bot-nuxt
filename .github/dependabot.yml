@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/" 
+    labels:
+      - "🤖 Dependencies"
+    schedule:
+      interval: "daily"
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+          - "docusaurus"
+  - package-ecosystem: "yarn"
+    directory: "/" 
+    labels:
+      - "🤖 Dependencies"
+    schedule:
+      interval: "daily"
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+          - "docusaurus"        
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    labels:
+      - "🤖 Dependencies"
+    schedule:
+      interval: "daily"

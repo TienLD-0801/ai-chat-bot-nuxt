@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "chat-nuxt",
+      "name": "ai-chat-bot-nuxt",
       "script": "/app/.output/server/index.mjs",
       "cwd": "/app",
       "exec_mode": "cluster",

@@ -1,40 +1,36 @@
-# base image
-FROM node:lts AS base
+FROM node:20-alpine AS base
 LABEL maintainer="tienld@gmail.com"
 
-# install packages
-FROM base as packages
+FROM base AS packages
 
-WORKDIR /hanover-web
+WORKDIR /ai-chat-bot-nuxt
 
 COPY package.json .
 COPY yarn.lock .
 
 RUN yarn install --frozen-lockfile
 
-# build resources
-FROM base as builder
+FROM base AS builder
 
-WORKDIR /hanover-web
+WORKDIR /ai-chat-bot-nuxt
 
-COPY --from=packages /hanover-web .
+COPY --from=packages /ai-chat-bot-nuxt .
 COPY . .
 
 RUN yarn build
 
 
-# production stage
-FROM base as production
+FROM base AS production
 
 # global runtime packages
 RUN yarn global add pm2 \
     && yarn cache clean
 
-WORKDIR /hanover-web
+WORKDIR /ai-chat-bot-nuxt
 
-COPY --from=builder /hanover-web/public ./public
-COPY --from=builder /hanover-web/.output ./.output
-COPY --from=builder /hanover-web/build ./build
+COPY --from=builder /ai-chat-bot-nuxt/public ./public
+COPY --from=builder /ai-chat-bot-nuxt/.output ./.output
+COPY --from=builder /ai-chat-bot-nuxt/build ./build
 
 COPY docker/pm2.json ./pm2.json
 COPY docker/entrypoint.sh ./entrypoint.sh
