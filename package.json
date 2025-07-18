@@ -11,7 +11,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@pinia/nuxt": "^0.5.1",
     "caniuse-lite": "^1.0.30001727",
     "nuxt": "^3.11.2",
