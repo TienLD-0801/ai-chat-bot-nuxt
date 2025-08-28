@@ -20,7 +20,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@vueuse/core": "^13.7.0",
+    "@vueuse/core": "^13.8.0",
     "sass": "^1.90.0"
   }
 }
